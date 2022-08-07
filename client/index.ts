@@ -5,6 +5,6 @@ import axios from 'axios';
     message: 'Hello from client',
   });
   console.log(
-    `(client) Got message from the server: ${JSON.stringify(response)}`
+    `(client) Got message from the server: ${JSON.stringify(response.data)}`
   );
 })();

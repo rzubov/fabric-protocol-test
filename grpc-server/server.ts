@@ -4,6 +4,8 @@ import { ProtoGrpcType } from '../proto/hello';
 import { ClientMessage } from '../proto/hello_package/ClientMessage';
 import { GreetingHandlers } from '../proto/hello_package/Greeting';
 import { ServerMessage } from '../proto/hello_package/ServerMessage';
+import config from './config';
+import helloController from '../controllers/hello';
 
 const host = '0.0.0.0:9090';
 
@@ -13,12 +15,24 @@ const greetingServer: GreetingHandlers = {
     callback: grpc.sendUnaryData<ServerMessage>
   ) {
     if (call.request) {
-      console.log(`(grpc server) Got client message: ${call.request.message}`);
+      console.log(
+        `(grpc server) Got client message: ${JSON.stringify(
+          call.request.message
+        )}`
+      );
     }
-    callback(null, {
-      serverId: '2',
-      serverName: 'GRPC Server',
-    });
+    helloController(
+      {
+        message: call.request.message,
+      },
+      config
+    )
+      .then((response) => {
+        callback(null, response);
+      })
+      .catch((error) => {
+        callback(error);
+      });
   },
 };
 

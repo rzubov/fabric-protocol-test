@@ -37,7 +37,7 @@ export default {
                 reject(error.message);
               } else if (serverMessage) {
                 console.log(
-                  `(grpc client) Got grpc server message: serverId = ${JSON.stringify(
+                  `(grpc client) Got grpc server message: ${JSON.stringify(
                     serverMessage
                   )}`
                 );
