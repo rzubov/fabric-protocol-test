@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+package hello_package;
+
+message ServerMessage {
+  string server_id = 1;
+  string server_name = 2;
+}
+
+message ClientMessage {
+  string message = 1;
+}
+
+service Greeting {
+  rpc sayHello(ClientMessage) returns (ServerMessage) {}
+}
