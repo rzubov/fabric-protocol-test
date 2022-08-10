@@ -4,7 +4,6 @@ import { ProtoGrpcType } from '../proto/hello';
 import { ClientMessage } from '../proto/hello_package/ClientMessage';
 import { GreetingHandlers } from '../proto/hello_package/Greeting';
 import { ServerMessage } from '../proto/hello_package/ServerMessage';
-import config from './config';
 import helloController from '../controllers/hello';
 
 const host = '0.0.0.0:9090';
@@ -21,12 +20,15 @@ const greetingServer: GreetingHandlers = {
         )}`
       );
     }
-    helloController(
-      {
+    helloController({
+      data: {
         message: call.request.message,
       },
-      config
-    )
+      serverInfo: {
+        serverId: '2',
+        serverName: 'GRPC',
+      },
+    })
       .then((response) => {
         callback(null, response);
       })

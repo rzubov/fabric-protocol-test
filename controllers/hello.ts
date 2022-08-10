@@ -1,25 +1,27 @@
-import { ServerConfig } from '../types/server-config';
 import { ClientMessage } from '../proto/hello_package/ClientMessage';
-import { ServerMessage } from '../proto/hello_package/ServerMessage';
-import executeHook from '../helpers/execute-hook';
-import { ControllerError } from '../types/controller';
+
+interface Request {
+  data: ClientMessage;
+  serverInfo: {
+    serverName: string;
+    serverId: string;
+  };
+}
 
 const helloController = async (
-  req: ClientMessage,
-  config: ServerConfig
-): Promise<ServerMessage> => {
-  const hooks = config.controllers['hello']?.hooks ?? [];
-  if (hooks.length) {
-    for (let i = 0; i < hooks.length; i++) {
-      const hookResponse = await executeHook(hooks[i], req.message);
-      console.log('hook response:', hookResponse);
-    }
+  req: Request,
+  previousResponse?: any,
+  next?: any
+): Promise<any> => {
+  if (req.serverInfo?.serverId === '2') {
+    return {
+      serverName: req.serverInfo.serverName,
+      serverId: req.serverInfo.serverId,
+    };
   }
-  const { serverName, serverId } = config;
-  return {
-    serverName,
-    serverId,
-  };
+  if (next) {
+    return next(req.data);
+  }
 };
 
 export default helloController;

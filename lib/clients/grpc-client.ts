@@ -1,7 +1,7 @@
 import * as grpc from '@grpc/grpc-js';
 import * as protoLoader from '@grpc/proto-loader';
-import { ProtoGrpcType } from '../proto/hello';
-import { ServerMessage } from '../proto/hello_package/ServerMessage';
+import { ProtoGrpcType } from '../../proto/hello';
+import { ServerMessage } from '../../proto/hello_package/ServerMessage';
 
 const host = '0.0.0.0:9090';
 const packageDefinition = protoLoader.loadSync('./proto/hello.proto');
