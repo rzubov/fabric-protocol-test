@@ -25,7 +25,6 @@ app.post('/', async (req: Request, res: Response) => {
       serverId: '1',
       serverName: 'HTTP Server',
     },
-
   });
   console.log(
     `(http server) Got value from helloController: ${JSON.stringify(response)}`

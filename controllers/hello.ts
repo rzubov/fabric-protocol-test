@@ -13,6 +13,7 @@ const helloController = async (
   previousResponse?: any,
   next?: any
 ): Promise<any> => {
+  // If we can handle everything here
   if (req.serverInfo?.serverId === '2') {
     return {
       serverName: req.serverInfo.serverName,
