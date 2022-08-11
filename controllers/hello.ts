@@ -1,12 +1,6 @@
 import { ClientMessage } from '../proto/hello_package/ClientMessage';
 
-interface Request {
-  data: ClientMessage;
-  serverInfo: {
-    serverName: string;
-    serverId: string;
-  };
-}
+import { Request } from '../lib/types/request';
 
 const helloController = async (
   req: Request,
@@ -14,10 +8,10 @@ const helloController = async (
   next?: any
 ): Promise<any> => {
   // If we can handle everything here
-  if (req.serverInfo?.serverId === '2') {
+  if (req.metaData?.serverId === '2') {
     return {
-      serverName: req.serverInfo.serverName,
-      serverId: req.serverInfo.serverId,
+      serverName: req.metaData.serverName,
+      serverId: req.metaData.serverId,
     };
   }
   if (next) {

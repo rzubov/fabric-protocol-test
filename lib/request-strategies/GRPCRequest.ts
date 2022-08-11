@@ -1,14 +1,11 @@
-import { ServerControllerHook } from '../../types/server-config';
-import grpcClient from '../clients/grpc-client';
+import { ServerControllerHook } from '../types/server-config';
 import { IRequestExecutionStrategy } from './types';
+import GRPCClient from '../clients/GRPCClient';
 
 class GRPCRequest implements IRequestExecutionStrategy {
   execute(hook: ServerControllerHook, data?: object): Promise<unknown> {
-    /*TODO: create new instance and pass host*/
-    // @ts-ignore
-    return grpcClient[hook.controller](
-      JSON.stringify(data)
-    ) as Promise<unknown>;
+    const client = new GRPCClient(hook.host);
+    return client.execute(hook, data);
   }
 }
 

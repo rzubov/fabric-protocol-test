@@ -1,29 +1,12 @@
 import RequestExecutor from './RequestExecutor';
-
-interface RemoteHandler {
-  protocol: string;
-  host: string;
-  controller: string;
-  method?: string;
-}
-
-interface LocalHandler {
-  setNext(handler: Handler): Handler;
-
-  handleNext(request: any, previousResponse: any): any;
-
-  handle(request: any, previousResponse: any): any;
-}
-
-type Handler = RemoteHandler | LocalHandler;
+import { ControllerFn, Handler } from './types/controller';
+import { Request } from './types/request';
 
 export class Controller {
-  private controller: any;
+  private controller: ControllerFn;
   private nextHandler?: Handler;
 
-  constructor(
-    controller: any
-  ) {
+  constructor(controller: ControllerFn) {
     this.controller = controller;
   }
 
@@ -32,7 +15,10 @@ export class Controller {
     return handler;
   }
 
-  public async handleNext(request: any, previousResponse?: any): Promise<any> {
+  public async handleNext(
+    request: Request,
+    previousResponse?: object
+  ): Promise<unknown> {
     if (!this.nextHandler) {
       return null;
     }
@@ -43,7 +29,10 @@ export class Controller {
     return await requestExecutor.execute(this.nextHandler, request);
   }
 
-  public async handle(request: any, previousResponse?: any): Promise<any> {
+  public async handle(
+    request: Request,
+    previousResponse?: object
+  ): Promise<unknown> {
     return this.controller(
       request,
       previousResponse,

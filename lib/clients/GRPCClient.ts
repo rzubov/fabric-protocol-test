@@ -2,31 +2,43 @@ import * as grpc from '@grpc/grpc-js';
 import * as protoLoader from '@grpc/proto-loader';
 import { ProtoGrpcType } from '../../proto/hello';
 import { ServerMessage } from '../../proto/hello_package/ServerMessage';
+import { ServerControllerHook } from '../types/server-config';
 
-const host = '0.0.0.0:9090';
 const packageDefinition = protoLoader.loadSync('./proto/hello.proto');
 const proto = grpc.loadPackageDefinition(
   packageDefinition
 ) as unknown as ProtoGrpcType;
 
-const grpcClient = new proto.hello_package.Greeting(
-  host,
-  grpc.credentials.createInsecure()
-);
 
-export default {
-  sayHello: async (message: string) => {
+
+export default class GRPCClient{
+  client: grpc.Client
+
+  constructor(host: string, credentials?: object) {
+    this.client = new proto.hello_package.Greeting(
+      host,
+      grpc.credentials.createInsecure()
+    )
+  }
+
+  async execute(hook: ServerControllerHook, data?: object) {
     return new Promise((resolve, reject) => {
       const deadline = new Date();
       deadline.setSeconds(deadline.getSeconds() + 5);
-      grpcClient.waitForReady(deadline, (error?: Error) => {
+
+      this.client.waitForReady(deadline, (error?: Error) => {
         if (error) {
           console.log(`Client connect error: ${error.message}`);
           reject(error.message);
         } else {
-          grpcClient.sayHello(
+          if(!(hook.controller in this.client)){
+            throw new Error(`${hook.controller} method is not supported`)
+          }
+
+          // @ts-ignore
+          this.client[hook.controller](
             {
-              message,
+              message: JSON.stringify(data),
             },
             (
               error?: grpc.ServiceError | null,
@@ -48,6 +60,6 @@ export default {
         }
       });
     });
-  },
-};
+  }
+}
 

@@ -21,7 +21,7 @@ app.post('/', async (req: Request, res: Response) => {
     data: {
       message: req.body.message,
     },
-    serverInfo: {
+    metaData: {
       serverId: '1',
       serverName: 'HTTP Server',
     },

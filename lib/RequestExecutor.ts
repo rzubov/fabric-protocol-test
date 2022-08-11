@@ -1,4 +1,4 @@
-import { ServerControllerHook } from '../types/server-config';
+import { ServerControllerHook } from './types/server-config';
 import { IRequestExecutionStrategy } from './request-strategies/types';
 import GRPCRequest from './request-strategies/GRPCRequest';
 import HTTPRequest from './request-strategies/HTTPRequest';

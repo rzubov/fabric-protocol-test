@@ -1,4 +1,4 @@
-import { ServerControllerHook } from '../../types/server-config';
+import { ServerControllerHook } from '../types/server-config';
 import { IRequestExecutionStrategy } from './types';
 import axios from 'axios';
 

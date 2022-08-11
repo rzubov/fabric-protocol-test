@@ -20,7 +20,7 @@ const greetingServer: GreetingHandlers = {
       data: {
         message: call.request.message,
       },
-      serverInfo: {
+      metaData: {
         serverId: '2',
         serverName: 'GRPC',
       },
