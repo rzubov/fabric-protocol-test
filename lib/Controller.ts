@@ -1,4 +1,4 @@
-import executeHook from './execute-hook';
+import RequestExecutor from './RequestExecutor';
 
 interface RemoteHandler {
   protocol: string;
@@ -39,8 +39,8 @@ export class Controller {
     if (!('protocol' in this.nextHandler)) {
       return this.nextHandler.handle(request, previousResponse);
     }
-
-    return await executeHook(this.nextHandler, request);
+    const requestExecutor = new RequestExecutor(this.nextHandler.protocol);
+    return await requestExecutor.execute(this.nextHandler, request);
   }
 
   public async handle(request: any, previousResponse?: any): Promise<any> {
