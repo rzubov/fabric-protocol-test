@@ -37,7 +37,6 @@ export default class GRPCClient {
           if (!(hook.controller in this.client)) {
             throw new Error(`${hook.controller} method is not supported`);
           }
-          console.log(request, previousResponse)
           // @ts-ignore
           this.client[hook.controller](
             {

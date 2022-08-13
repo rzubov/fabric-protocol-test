@@ -5,6 +5,7 @@ import { ClientMessage } from '../proto/hello_package/ClientMessage';
 import { GreetingHandlers } from '../proto/hello_package/Greeting';
 import { ServerMessage } from '../proto/hello_package/ServerMessage';
 import helloController from '../controllers/hello';
+import { Controller } from '../lib/Controller';
 
 const host = '0.0.0.0:9090';
 
@@ -13,20 +14,24 @@ const greetingServer: GreetingHandlers = {
     call: grpc.ServerUnaryCall<ClientMessage, ServerMessage>,
     callback: grpc.sendUnaryData<ServerMessage>
   ) {
-    const request = JSON.stringify(call.request);
+
     if (call.request) {
-      console.log(`(grpc server) Got client message: ${request}`);
+      console.log(
+        `(grpc server) Got client message: ${JSON.stringify(call.request)}`
+      );
     }
-    helloController({
-      data: {
-        message: call.request.message,
-      },
-      metaData: {
-        serverId: '2',
-        serverName: 'GRPC',
-      },
-    })
-      .then((response) => {
+    const controller = new Controller(helloController);
+    controller
+      .handle({
+        data: {
+          message: call.request.message,
+        },
+        metaData: {
+          serverId: '2',
+          serverName: 'GRPC',
+        },
+      })
+      .then((response: any) => {
         callback(null, response);
       })
       .catch((error) => {

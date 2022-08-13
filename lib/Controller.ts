@@ -1,16 +1,16 @@
-import RequestExecutor from './RequestExecutor';
 import { ControllerFn, Handler } from './types/controller';
 import { Request } from './types/request';
+import { RemoteController } from './RemoteController';
 
 export class Controller {
   private controller: ControllerFn;
-  private nextHandler?: Handler;
+  private nextHandler?: Controller | RemoteController;
 
   constructor(controller: ControllerFn) {
     this.controller = controller;
   }
 
-  public setNext(handler: Handler): Handler {
+  public setNext(handler: Controller | RemoteController): Handler {
     this.nextHandler = handler;
     return handler;
   }
@@ -20,13 +20,9 @@ export class Controller {
     previousResponse?: object
   ): Promise<unknown> {
     if (!this.nextHandler) {
-      return null;
+      return previousResponse;
     }
-    if (!('protocol' in this.nextHandler)) {
-      return this.nextHandler.handle(request, previousResponse);
-    }
-    const requestExecutor = new RequestExecutor(this.nextHandler.protocol);
-    return await requestExecutor.execute(this.nextHandler, request);
+    return this.nextHandler.handle(request, previousResponse);
   }
 
   public async handle(

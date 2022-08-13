@@ -18,7 +18,10 @@ app.post('/', async (req: Request, res: Response) => {
     host: '0.0.0.0:9090',
     controller: 'sayHello',
   });
-  controller.setNext(remoteController);
+
+  controller
+    .setNext(remoteController);
+
   const response = await controller.handle({
     data: {
       message: req.body.message,
