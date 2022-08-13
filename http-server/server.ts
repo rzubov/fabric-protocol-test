@@ -4,6 +4,7 @@ import express from 'express';
 import bodyParser from 'body-parser';
 import helloController from '../controllers/hello';
 import { Controller } from '../lib/Controller';
+import { RemoteController } from '../lib/RemoteController';
 
 const app = express();
 app.use(bodyParser.json());
@@ -12,11 +13,12 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.post('/', async (req: Request, res: Response) => {
   console.log(`(http server) Got message from client: ${req.body.message}`);
   const controller = new Controller(helloController);
-  controller.setNext({
+  const remoteController = new RemoteController({
     protocol: 'grpc',
     host: '0.0.0.0:9090',
     controller: 'sayHello',
   });
+  controller.setNext(remoteController);
   const response = await controller.handle({
     data: {
       message: req.body.message,

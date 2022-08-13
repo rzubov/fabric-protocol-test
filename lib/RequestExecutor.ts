@@ -23,7 +23,11 @@ export default class RequestExecutor {
     this.strategy = strategyInstance;
   }
 
-  public execute(hook: ServerControllerHook, data?: object): Promise<unknown> {
-    return this.strategy.execute(hook, data);
+  public execute(
+    hook: ServerControllerHook,
+    request?: object,
+    previousResponse?: object
+  ): Promise<object> {
+    return this.strategy.execute(hook, request, previousResponse);
   }
 }

@@ -10,18 +10,21 @@ const proto = grpc.loadPackageDefinition(
 ) as unknown as ProtoGrpcType;
 
 
-
-export default class GRPCClient{
-  client: grpc.Client
+export default class GRPCClient {
+  client: grpc.Client;
 
   constructor(host: string, credentials?: object) {
     this.client = new proto.hello_package.Greeting(
       host,
       grpc.credentials.createInsecure()
-    )
+    );
   }
 
-  async execute(hook: ServerControllerHook, data?: object) {
+  async execute(
+    hook: ServerControllerHook,
+    request?: object,
+    previousResponse?: object
+  ) {
     return new Promise((resolve, reject) => {
       const deadline = new Date();
       deadline.setSeconds(deadline.getSeconds() + 5);
@@ -31,14 +34,17 @@ export default class GRPCClient{
           console.log(`Client connect error: ${error.message}`);
           reject(error.message);
         } else {
-          if(!(hook.controller in this.client)){
-            throw new Error(`${hook.controller} method is not supported`)
+          if (!(hook.controller in this.client)) {
+            throw new Error(`${hook.controller} method is not supported`);
           }
-
+          console.log(request, previousResponse)
           // @ts-ignore
           this.client[hook.controller](
             {
-              message: JSON.stringify(data),
+              message: JSON.stringify({
+                request,
+                previousResponse,
+              })
             },
             (
               error?: grpc.ServiceError | null,

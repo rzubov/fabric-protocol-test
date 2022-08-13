@@ -3,11 +3,18 @@ import { IRequestExecutionStrategy } from './types';
 import axios from 'axios';
 
 class HTTPRequest implements IRequestExecutionStrategy {
-  execute(hook: ServerControllerHook, data?: object): Promise<unknown> {
+  execute(
+    hook: ServerControllerHook,
+    request?: object,
+    previousResponse?: object
+  ): Promise<object> {
     return axios.request({
       url: `${hook.host}/${hook.controller}`,
       method: hook.method,
-      data,
+      data: {
+        request,
+        previousResponse,
+      },
     });
   }
 }

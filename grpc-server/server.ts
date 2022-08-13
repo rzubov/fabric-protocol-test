@@ -13,8 +13,9 @@ const greetingServer: GreetingHandlers = {
     call: grpc.ServerUnaryCall<ClientMessage, ServerMessage>,
     callback: grpc.sendUnaryData<ServerMessage>
   ) {
+    const request = JSON.stringify(call.request);
     if (call.request) {
-      console.log(`(grpc server) Got client message: ${call.request.message}`);
+      console.log(`(grpc server) Got client message: ${request}`);
     }
     helloController({
       data: {

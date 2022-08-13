@@ -1,5 +1,3 @@
-import { ClientMessage } from '../proto/hello_package/ClientMessage';
-
 import { Request } from '../lib/types/request';
 
 const helloController = async (
