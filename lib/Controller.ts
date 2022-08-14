@@ -1,28 +1,13 @@
-import { ControllerFn, Handler } from './types/controller';
 import { Request } from './types/request';
-import { RemoteController } from './RemoteController';
+import { BaseController } from './BaseController';
+import { ControllerFn } from './types/controller';
 
-export class Controller {
-  private controller: ControllerFn;
-  private nextHandler?: Controller | RemoteController;
+export class Controller extends BaseController {
+  private readonly controller: ControllerFn;
 
   constructor(controller: ControllerFn) {
+    super();
     this.controller = controller;
-  }
-
-  public setNext(handler: Controller | RemoteController): Handler {
-    this.nextHandler = handler;
-    return handler;
-  }
-
-  public async handleNext(
-    request: Request,
-    previousResponse?: object
-  ): Promise<unknown> {
-    if (!this.nextHandler) {
-      return previousResponse;
-    }
-    return this.nextHandler.handle(request, previousResponse);
   }
 
   public async handle(

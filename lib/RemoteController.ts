@@ -1,29 +1,14 @@
 import RequestExecutor from './RequestExecutor';
-import { Handler, RemoteHandler } from './types/controller';
+import { ControllerFn, Handler, RemoteHandler } from './types/controller';
 import { Request } from './types/request';
-import { Controller } from './Controller';
+import { BaseController } from './BaseController';
 
-export class RemoteController {
-  private request: RemoteHandler;
-  private nextHandler?: Controller | RemoteController;
+export class RemoteController extends BaseController {
+  private readonly request: RemoteHandler;
 
   constructor(request: RemoteHandler) {
+    super();
     this.request = request;
-  }
-
-  public setNext(handler: Controller | RemoteController): Handler {
-    this.nextHandler = handler;
-    return handler;
-  }
-
-  public async handleNext(
-    request: Request,
-    previousResponse?: object
-  ): Promise<unknown> {
-    if (!this.nextHandler) {
-      return previousResponse;
-    }
-    return this.nextHandler.handle(request, previousResponse);
   }
 
   public async handle(
