@@ -23,6 +23,7 @@ export default class RequestExecutor {
     this.strategy = strategyInstance;
   }
 
+
   public execute(
     hook: ServerControllerHook,
     request?: object,

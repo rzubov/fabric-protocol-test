@@ -5,6 +5,7 @@ import bodyParser from 'body-parser';
 import helloController from '../controllers/hello';
 import { Controller } from '../lib/Controller';
 import { RemoteController } from '../lib/RemoteController';
+import authController from '../controllers/auth';
 
 const app = express();
 app.use(bodyParser.json());
@@ -19,8 +20,7 @@ app.post('/', async (req: Request, res: Response) => {
     controller: 'sayHello',
   });
 
-  controller
-    .setNext(remoteController);
+  controller.setNext(remoteController);
 
   const response = await controller.handle({
     data: {
@@ -30,6 +30,41 @@ app.post('/', async (req: Request, res: Response) => {
       serverId: '1',
       serverName: 'HTTP Server',
     },
+  });
+  console.log(
+    `(http server) Got value from helloController: ${JSON.stringify(response)}`
+  );
+  res.send(response);
+});
+
+app.post('/auth', async (req: Request, res: Response) => {
+  console.log(
+    `(http server) Got auth request from client: ${req.body.message}`
+  );
+  const controller = new Controller(authController);
+
+  const remoteGoogleAuthController = new RemoteController({
+    protocol: 'http',
+    host: '0.0.0.0:8081',
+    controller: 'auth',
+    method: 'POST',
+  });
+
+  const remoteOktaAuthController = new RemoteController({
+    protocol: 'http',
+    host: '0.0.0.0:8082',
+    controller: 'auth',
+    method: 'POST',
+  });
+
+  controller.setNextGroup([
+    remoteGoogleAuthController,
+    remoteOktaAuthController,
+  ]);
+
+  const response = await controller.handle({
+    data: {},
+    metaData: {},
   });
   console.log(
     `(http server) Got value from helloController: ${JSON.stringify(response)}`

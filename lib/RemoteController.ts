@@ -1,5 +1,5 @@
 import RequestExecutor from './RequestExecutor';
-import { ControllerFn, Handler, RemoteHandler } from './types/controller';
+import { RemoteHandler } from './types/controller';
 import { Request } from './types/request';
 import { BaseController } from './BaseController';
 

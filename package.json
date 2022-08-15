@@ -18,6 +18,8 @@
     "lint:fix:prettier": "prettier --write '**/*.{ts,tsx,js,json,svg,md,yml}'",
     "start:grpc": "node ./grpc-server/server",
     "start:http": "node ./http-server/server",
+    "start:http:google": "node ./http-server-google/server",
+    "start:http:okta": "node ./http-server-okta/server",
     "start:client": "node ./client/index"
   },
   "dependencies": {
