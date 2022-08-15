@@ -7,7 +7,7 @@ class HTTPRequest implements IRequestExecutionStrategy {
     hook: ServerControllerHook,
     request?: object,
     previousResponse?: object
-  ): Promise<object> {;
+  ): Promise<object> {
     const response = await axios.request({
       url: `http://${hook.host}/${hook.controller}`,
       method: hook.method,
