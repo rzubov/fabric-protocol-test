@@ -5,6 +5,7 @@ package hello_package;
 message ServerMessage {
   string server_id = 1;
   string server_name = 2;
+  string session_id = 3;
 }
 
 message ClientMessage {

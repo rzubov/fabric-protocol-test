@@ -1,4 +1,4 @@
 export interface Request {
-  data: object;
+  data: Record<string, unknown> | undefined;
   metaData: Record<string, unknown> | undefined;
 }

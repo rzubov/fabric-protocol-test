@@ -1,4 +1,5 @@
 import { Request } from '../lib/types/request';
+import { v4 as uuidv4 } from 'uuid';
 
 const helloController = async (
   req: Request,
@@ -10,6 +11,7 @@ const helloController = async (
     return {
       serverName: req.metaData.serverName,
       serverId: req.metaData.serverId,
+      sessionId: uuidv4(),
     };
   }
   if (next) {

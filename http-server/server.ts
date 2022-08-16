@@ -63,13 +63,32 @@ app.post('/auth', async (req: Request, res: Response) => {
   ]);
 
   const response = await controller.handle({
-    data: {},
+    data: {
+      sessionId: req.body.sessionId,
+    },
     metaData: {},
   });
   console.log(
     `(http server) Got value from helloController: ${JSON.stringify(response)}`
   );
-  res.send(response);
+
+  // @ts-ignore
+  if (response.error) {
+    return res.send({
+      // @ts-ignore
+      message: response.error,
+    });
+  }
+  const auth = (response as any[]).some((r) => r.authenticated);
+
+  if (auth) {
+    return res.send({
+      message: 'Success',
+    });
+  }
+  res.send({
+    message: 'Failed',
+  });
 });
 
 const PORT = process.env.PORT || 8080;
