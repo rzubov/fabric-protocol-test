@@ -13,7 +13,8 @@ export class RemoteController extends BaseController {
 
   public async handle(
     request: Request,
-    previousResponse?: object
+    previousResponse?: object,
+    skipNext?: boolean
   ): Promise<unknown> {
     const requestExecutor = new RequestExecutor(this.request.protocol);
     const response = await requestExecutor.execute(
@@ -21,6 +22,9 @@ export class RemoteController extends BaseController {
       request,
       previousResponse
     );
+    if (skipNext) {
+      return response;
+    }
     return this.handleNext(request, response);
   }
 }

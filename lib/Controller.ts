@@ -12,12 +12,13 @@ export class Controller extends BaseController {
 
   public async handle(
     request: Request,
-    previousResponse?: object
+    previousResponse?: object,
+    skipNext?: boolean
   ): Promise<unknown> {
     return this.controller(
       request,
       previousResponse,
-      this.handleNext.bind(this)
+      skipNext ? void 0 : this.handleNext.bind(this)
     );
   }
 }

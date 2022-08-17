@@ -23,18 +23,27 @@ export abstract class BaseController {
     if (!this.nextHandler) {
       return previousResponse;
     }
+
     if (this.nextHandler instanceof Array) {
-      return Promise.all(
-        this.nextHandler.map((handler) =>
-          handler.handle(request, previousResponse)
-        )
-      )
+      const handlers = [...this.nextHandler];
+      const lastHandler = handlers.pop();
+      const previousResponses = await Promise.all(
+        handlers.map((handler) => handler.handle(request, previousResponse))
+      );
+      const lastResponse = await lastHandler.handle(
+        request,
+        previousResponse,
+        true
+      );
+      previousResponses.push(lastResponse);
+      return lastHandler.handleNext(request, previousResponses);
     }
     return this.nextHandler.handle(request, previousResponse);
   }
 
   abstract handle(
     request: Request,
-    previousResponse?: object
+    previousResponse?: object,
+    skipNext?: boolean
   ): Promise<unknown>;
 }

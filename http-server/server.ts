@@ -6,6 +6,7 @@ import helloController from '../controllers/hello';
 import { Controller } from '../lib/Controller';
 import { RemoteController } from '../lib/RemoteController';
 import authController from '../controllers/auth';
+import afterAuth from '../controllers/afterAuth';
 
 const app = express();
 app.use(bodyParser.json());
@@ -13,6 +14,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 
 app.post('/', async (req: Request, res: Response) => {
   console.log(`(http server) Got message from client: ${req.body.message}`);
+  /*TODO: try to use both function and object and have single controller */
   const controller = new Controller(helloController);
   const remoteController = new RemoteController({
     protocol: 'grpc',
@@ -57,10 +59,11 @@ app.post('/auth', async (req: Request, res: Response) => {
     method: 'POST',
   });
 
-  controller.setNextGroup([
-    remoteGoogleAuthController,
-    remoteOktaAuthController,
-  ]);
+  const afterAuthController = new Controller(afterAuth);
+
+  controller
+    .setNextGroup([remoteGoogleAuthController, remoteOktaAuthController])
+    .setNext(afterAuthController);
 
   const response = await controller.handle({
     data: {
@@ -72,22 +75,8 @@ app.post('/auth', async (req: Request, res: Response) => {
     `(http server) Got value from helloController: ${JSON.stringify(response)}`
   );
 
-  // @ts-ignore
-  if (response.error) {
-    return res.send({
-      // @ts-ignore
-      message: response.error,
-    });
-  }
-  const auth = (response as any[]).some((r) => r.authenticated);
-
-  if (auth) {
-    return res.send({
-      message: 'Success',
-    });
-  }
   res.send({
-    message: 'Failed',
+    message: response,
   });
 });
 
