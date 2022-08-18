@@ -2,6 +2,8 @@ import { Request, Response } from 'express';
 import express from 'express';
 
 import bodyParser from 'body-parser';
+import { Controller } from '../lib/Controller';
+import chainEnd from '../controllers/chainEnd';
 
 const app = express();
 app.use(bodyParser.json());
@@ -13,6 +15,11 @@ app.post('/auth', async (req: Request, res: Response) => {
   res.send({
     authenticated: false,
   });
+});
+
+app.post('/chain', async (req: Request, res: Response) => {
+  const controller = new Controller(chainEnd);
+  res.send(await controller.handle({ data: {}, metaData: {} }));
 });
 
 const PORT = process.env.PORT || 8082;

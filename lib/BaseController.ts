@@ -6,7 +6,9 @@ import { Controller } from './Controller';
 export abstract class BaseController {
   protected nextHandler?: Controller | RemoteController;
 
-  public setNext(handler: Controller | RemoteController): Handler {
+  public setNext(
+    handler: Controller | RemoteController
+  ): Controller | RemoteController {
     this.nextHandler = handler;
     return handler;
   }

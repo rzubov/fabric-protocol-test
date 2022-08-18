@@ -7,6 +7,7 @@ import { Controller } from '../lib/Controller';
 import { RemoteController } from '../lib/RemoteController';
 import authController from '../controllers/auth';
 import afterAuth from '../controllers/afterAuth';
+import chainLocal from '../controllers/chainLocal';
 
 const app = express();
 app.use(bodyParser.json());
@@ -41,7 +42,7 @@ app.post('/', async (req: Request, res: Response) => {
 
 app.post('/auth', async (req: Request, res: Response) => {
   console.log(
-    `(http server) Got auth request from client: ${req.body.message}`
+    `(http server) Got auth request from client: ${JSON.stringify(req.body)}`
   );
   const controller = new Controller(authController);
 
@@ -73,6 +74,46 @@ app.post('/auth', async (req: Request, res: Response) => {
   });
   console.log(
     `(http server) Got value from helloController: ${JSON.stringify(response)}`
+  );
+
+  res.send({
+    message: response,
+  });
+});
+
+app.post('/chain', async (req: Request, res: Response) => {
+  console.log(
+    `(http server) Got auth request from client: ${JSON.stringify(req.body)}`
+  );
+  const controller = new Controller(chainLocal);
+
+  const chainMiddleController = new RemoteController({
+    protocol: 'http',
+    host: '0.0.0.0:8081',
+    controller: 'chain',
+    method: 'POST',
+  });
+
+  const chainEndController = new RemoteController({
+    protocol: 'http',
+    host: '0.0.0.0:8082',
+    controller: 'chain',
+    method: 'POST',
+  });
+
+  controller
+    .setNext(chainMiddleController)
+    .setNext(chainEndController);
+
+  const response = await controller.handle({
+    data: {
+      sessionId: req.body.sessionId,
+    },
+    metaData: {},
+  });
+  console.log(response);
+  console.log(
+    `(http server) Got response  from ${response} controller`
   );
 
   res.send({

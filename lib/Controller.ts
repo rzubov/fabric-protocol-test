@@ -15,10 +15,14 @@ export class Controller extends BaseController {
     previousResponse?: object,
     skipNext?: boolean
   ): Promise<unknown> {
-    return this.controller(
+    const response = await this.controller(
       request,
       previousResponse,
-      skipNext ? void 0 : this.handleNext.bind(this)
     );
+
+    if (skipNext || !(response as any).next) {
+      return response;
+    }
+    return this.handleNext(request, response);
   }
 }
