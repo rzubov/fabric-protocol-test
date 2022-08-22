@@ -13,7 +13,7 @@ export type ControllerFn = (
   request: Request,
   previousResponse?: object,
   next?: ControllerNextFn
-) => object;
+) => Promise<{ next: boolean; data: object }>;
 
 export interface RemoteHandler {
   protocol: string;

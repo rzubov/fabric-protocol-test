@@ -20,8 +20,8 @@ export class Controller extends BaseController {
       previousResponse,
     );
 
-    if (skipNext || !(response as any).next) {
-      return response;
+    if (skipNext || !response.next) {
+      return response.data;
     }
     return this.handleNext(request, response);
   }
