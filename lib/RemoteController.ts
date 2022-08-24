@@ -1,6 +1,5 @@
 import RequestExecutor from './RequestExecutor';
 import { RemoteHandler } from './types/controller';
-import { Request } from './types/request';
 import { BaseController } from './BaseController';
 
 export class RemoteController extends BaseController {
@@ -12,7 +11,7 @@ export class RemoteController extends BaseController {
   }
 
   public async handle(
-    request: Request,
+    request: object | null,
     previousResponse?: object,
     skipNext?: boolean
   ): Promise<unknown> {
@@ -22,7 +21,7 @@ export class RemoteController extends BaseController {
       request,
       previousResponse
     );
-    if (skipNext || !(response as any).next) {
+    if (skipNext || ! response.next) {
       return response;
     }
     return this.handleNext(request, response);

@@ -1,19 +1,22 @@
-import { Request } from './request';
-
 export interface ControllerError {
   error: string;
 }
 
+export interface ControllerResponse {
+  next?: boolean;
+  data: unknown;
+}
+
 type ControllerNextFn = (
-  request: Request,
+  request: object,
   previousResponse?: object
 ) => Promise<unknown>;
 
 export type ControllerFn = (
-  request: Request,
-  previousResponse?: object,
+  request: any,
+  previousResponse?: any,
   next?: ControllerNextFn
-) => Promise<{ next: boolean; data: object }>;
+) => Promise<ControllerResponse>;
 
 export interface RemoteHandler {
   protocol: string;
@@ -21,13 +24,3 @@ export interface RemoteHandler {
   controller: string;
   method?: string;
 }
-
-export interface LocalHandler {
-  setNext(handler: Handler): Handler;
-
-  handleNext(request: Request, previousResponse?: object): Promise<unknown>;
-
-  handle(request: Request, previousResponse?: object): Promise<unknown>;
-}
-
-export type Handler = RemoteHandler | LocalHandler;

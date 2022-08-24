@@ -1,22 +1,26 @@
-import { Request } from '../lib/types/request';
 import { v4 as uuidv4 } from 'uuid';
+import { ControllerResponse } from '../lib/types/controller';
+
+interface IHelloRequest {
+  serverName?: string;
+  serverId?: string;
+}
 
 const helloController = async (
-  req: Request,
-  previousResponse?: any
-): Promise<any> => {
+  req: IHelloRequest
+): Promise<ControllerResponse> => {
   // If we can handle everything here
-  if (req.metaData?.serverId === '2') {
+  if (req.serverId === '2') {
     return {
       data: {
-        serverName: req.metaData.serverName,
-        serverId: req.metaData.serverId,
+        serverName: req.serverName,
+        serverId: req.serverId,
         sessionId: uuidv4(),
       },
     };
   }
   return {
-    data: req.data,
+    data: req,
     next: true,
   };
 };

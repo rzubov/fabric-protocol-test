@@ -1,19 +1,22 @@
-import { Request } from '../lib/types/request';
+import { ControllerResponse } from '../lib/types/controller';
+
+interface IAuthRequest {
+  sessionId: string;
+}
 
 const authController = async (
-  req: Request,
-  previousResponse?: any,
-): Promise<any> => {
+  req: IAuthRequest
+): Promise<ControllerResponse> => {
   // If we can handle everything here
-  console.log('auth controller', req);
-  if (!req?.data?.sessionId) {
+  if (!req?.sessionId) {
     return {
-      error: 'Auth failed, sessionId is required',
+      data: {
+        error: 'Auth failed, sessionId is required',
+      },
     };
   }
-
   return {
-    data: req.data,
+    data: req,
   };
 };
 

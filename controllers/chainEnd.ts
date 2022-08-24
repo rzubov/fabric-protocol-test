@@ -1,6 +1,6 @@
-import { Request } from '../lib/types/request';
+import { ControllerResponse } from '../lib/types/controller';
 
-const chainMiddleController = async (req: Request): Promise<any> => {
+const chainMiddleController = async (): Promise<ControllerResponse> => {
   return {
     next: false,
     data: 'end',

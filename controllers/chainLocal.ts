@@ -1,6 +1,6 @@
-import { Request } from '../lib/types/request';
+import { ControllerResponse } from '../lib/types/controller';
 
-const chainLocalController = async (req: Request): Promise<any> => {
+const chainLocalController = async (): Promise<ControllerResponse> => {
   return {
     next: true,
     data: 'local',

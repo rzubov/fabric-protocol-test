@@ -23,13 +23,10 @@ const greetingServer: GreetingHandlers = {
     const controller = new Controller(helloController);
     controller
       .handle({
-        data: {
-          message: call.request.message,
-        },
-        metaData: {
-          serverId: '2',
-          serverName: 'GRPC',
-        },
+        message: call.request.message,
+        serverId: '2',
+        serverName: 'GRPC'
+
       })
       .then((response: any) => {
         callback(null, response);

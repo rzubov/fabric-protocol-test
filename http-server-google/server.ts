@@ -19,7 +19,7 @@ app.post('/auth', async (req: Request, res: Response) => {
 
 app.post('/chain', async (req: Request, res: Response) => {
   const controller = new Controller(chainMiddle);
-  res.send(await controller.handle({ data: {}, metaData: {} }));
+  res.send(await controller.handle( ));
 });
 
 const PORT = process.env.PORT || 8081;

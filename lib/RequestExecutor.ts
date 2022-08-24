@@ -2,6 +2,7 @@ import { ServerControllerHook } from './types/server-config';
 import { IRequestExecutionStrategy } from './request-strategies/types';
 import GRPCRequest from './request-strategies/GRPCRequest';
 import HTTPRequest from './request-strategies/HTTPRequest';
+import { ControllerResponse } from './types/controller';
 
 const strategies = new Map([
   ['grpc', new GRPCRequest()],
@@ -26,9 +27,9 @@ export default class RequestExecutor {
 
   public execute(
     hook: ServerControllerHook,
-    request?: object,
+    request?: object | null,
     previousResponse?: object
-  ): Promise<object> {
+  ): Promise<ControllerResponse> {
     return this.strategy.execute(hook, request, previousResponse);
   }
 }

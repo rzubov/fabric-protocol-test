@@ -26,13 +26,9 @@ app.post('/', async (req: Request, res: Response) => {
   controller.setNext(remoteController);
 
   const response = await controller.handle({
-    data: {
-      message: req.body.message,
-    },
-    metaData: {
-      serverId: '1',
-      serverName: 'HTTP Server',
-    },
+    message: req.body.message,
+    serverId: '1',
+    serverName: 'HTTP Server',
   });
   console.log(
     `(http server) Got value from helloController: ${JSON.stringify(response)}`
@@ -67,10 +63,7 @@ app.post('/auth', async (req: Request, res: Response) => {
     .setNext(afterAuthController);
   console.log('auth:', req.body);
   const response = await controller.handle({
-    data: {
-      sessionId: req.body.sessionId,
-    },
-    metaData: {},
+    sessionId: req.body.sessionId,
   });
   console.log(
     `(http server) Got value from helloController: ${JSON.stringify(response)}`
@@ -106,10 +99,7 @@ app.post('/chain', async (req: Request, res: Response) => {
     .setNext(chainEndController);
 
   const response = await controller.handle({
-    data: {
-      sessionId: req.body.sessionId,
-    },
-    metaData: {},
+    sessionId: req.body.sessionId,
   });
   console.log(response);
   console.log(

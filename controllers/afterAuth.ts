@@ -1,13 +1,14 @@
-import { Request } from '../lib/types/request';
+import { ControllerResponse } from '../lib/types/controller';
+
+interface IAuthPrevious {
+  authenticated: boolean;
+}
 
 const afterAuthController = async (
-  req: Request,
-  previousResponse?: any
-): Promise<any> => {
-  console.log('after auth', req, previousResponse);
-  const auth = previousResponse.some(
-    (r: { authenticated: any }) => r.authenticated
-  );
+  req: null,
+  previousResponse: IAuthPrevious[]
+): Promise<ControllerResponse> => {
+  const auth = previousResponse.some((r) => r.authenticated);
   return {
     data: auth ? 'Success' : 'Failed',
   };

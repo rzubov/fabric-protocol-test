@@ -1,4 +1,3 @@
-import { Request } from './types/request';
 import { BaseController } from './BaseController';
 import { ControllerFn } from './types/controller';
 
@@ -11,14 +10,11 @@ export class Controller extends BaseController {
   }
 
   public async handle(
-    request: Request,
+    request: object | null = null,
     previousResponse?: object,
     skipNext?: boolean
   ): Promise<unknown> {
-    const response = await this.controller(
-      request,
-      previousResponse,
-    );
+    const response = await this.controller(request, previousResponse);
 
     if (skipNext || !response.next) {
       return response.data;

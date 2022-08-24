@@ -1,6 +1,4 @@
-import { Handler } from './types/controller';
 import { RemoteController } from './RemoteController';
-import { Request } from './types/request';
 import { Controller } from './Controller';
 
 export abstract class BaseController {
@@ -19,7 +17,7 @@ export abstract class BaseController {
   }
 
   public async handleNext(
-    request: Request,
+    request: object | null,
     previousResponse?: object
   ): Promise<unknown> {
     if (!this.nextHandler) {
@@ -44,7 +42,7 @@ export abstract class BaseController {
   }
 
   abstract handle(
-    request: Request,
+    request: object | null,
     previousResponse?: object,
     skipNext?: boolean
   ): Promise<unknown>;
