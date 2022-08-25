@@ -6,9 +6,13 @@ interface IHelloRequest {
   serverId?: string;
 }
 
+interface IServerDataResponse extends IHelloRequest {
+  sessionId: string;
+}
+
 const helloController = async (
   req: IHelloRequest
-): Promise<ControllerResponse> => {
+): Promise<ControllerResponse<IHelloRequest | IServerDataResponse>> => {
   // If we can handle everything here
   if (req.serverId === '2') {
     return {

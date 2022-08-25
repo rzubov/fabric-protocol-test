@@ -7,7 +7,7 @@ interface IAuthPrevious {
 const afterAuthController = async (
   req: null,
   previousResponse: IAuthPrevious[]
-): Promise<ControllerResponse> => {
+): Promise<ControllerResponse<string>> => {
   const auth = previousResponse.some((r) => r.authenticated);
   return {
     data: auth ? 'Success' : 'Failed',

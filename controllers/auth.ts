@@ -4,9 +4,13 @@ interface IAuthRequest {
   sessionId: string;
 }
 
+interface IAuthError {
+  error: string;
+}
+
 const authController = async (
   req: IAuthRequest
-): Promise<ControllerResponse> => {
+): Promise<ControllerResponse<IAuthRequest | IAuthError>> => {
   // If we can handle everything here
   if (!req?.sessionId) {
     return {

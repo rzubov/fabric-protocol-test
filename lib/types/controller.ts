@@ -2,9 +2,9 @@ export interface ControllerError {
   error: string;
 }
 
-export interface ControllerResponse {
+export interface ControllerResponse<T = unknown> {
   next?: boolean;
-  data: unknown;
+  data: T;
 }
 
 type ControllerNextFn = (

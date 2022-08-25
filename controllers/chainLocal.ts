@@ -1,6 +1,6 @@
 import { ControllerResponse } from '../lib/types/controller';
 
-const chainLocalController = async (): Promise<ControllerResponse> => {
+const chainLocalController = async (): Promise<ControllerResponse<string>> => {
   return {
     next: true,
     data: 'local',
