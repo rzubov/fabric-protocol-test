@@ -1,3 +1,6 @@
+import { Controller } from '../Controller';
+import { RemoteController } from '../RemoteController';
+
 export interface ControllerError {
   error: string;
 }
@@ -7,15 +10,9 @@ export interface ControllerResponse<T = unknown> {
   data: T;
 }
 
-type ControllerNextFn = (
-  request: object,
-  previousResponse?: object
-) => Promise<unknown>;
-
 export type ControllerFn = (
-  request: any,
-  previousResponse?: any,
-  next?: ControllerNextFn
+  request: unknown,
+  previousResponse?: unknown
 ) => Promise<ControllerResponse>;
 
 export interface RemoteHandler {
@@ -24,3 +21,5 @@ export interface RemoteHandler {
   controller: string;
   method?: string;
 }
+
+export type IController = Controller | RemoteController;

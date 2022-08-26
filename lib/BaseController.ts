@@ -1,17 +1,16 @@
-import { RemoteController } from './RemoteController';
-import { Controller } from './Controller';
+import { IController } from './types/controller';
 
 export abstract class BaseController {
-  protected nextHandler?: Controller | RemoteController;
+  protected nextHandler?: IController | IController[];
 
   public setNext(
-    handler: Controller | RemoteController
-  ): Controller | RemoteController {
+    handler: IController
+  ): IController {
     this.nextHandler = handler;
     return handler;
   }
 
-  public setNextGroup(handlers: any) {
+  public setNextGroup(handlers: IController[]) {
     this.nextHandler = handlers;
     return [...handlers].pop();
   }
@@ -30,13 +29,13 @@ export abstract class BaseController {
       const previousResponses = await Promise.all(
         handlers.map((handler) => handler.handle(request, previousResponse))
       );
-      const lastResponse = await lastHandler.handle(
+      const lastResponse = await lastHandler?.handle(
         request,
         previousResponse,
         true
       );
       previousResponses.push(lastResponse);
-      return lastHandler.handleNext(request, previousResponses);
+      return lastHandler?.handleNext(request, previousResponses);
     }
     return this.nextHandler.handle(request, previousResponse);
   }
