@@ -11,8 +11,8 @@ export interface ControllerResponse<T = unknown> {
 }
 
 export type ControllerFn = (
-  request: unknown,
-  previousResponse?: unknown
+  request: any,
+  previousResponse?: any
 ) => Promise<ControllerResponse>;
 
 export interface RemoteHandler {

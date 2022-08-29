@@ -14,7 +14,6 @@ const greetingServer: GreetingHandlers = {
     call: grpc.ServerUnaryCall<ClientMessage, ServerMessage>,
     callback: grpc.sendUnaryData<ServerMessage>
   ) {
-
     if (call.request) {
       console.log(
         `(grpc server) Got client message: ${JSON.stringify(call.request)}`
@@ -25,8 +24,7 @@ const greetingServer: GreetingHandlers = {
       .handle({
         message: call.request.message,
         serverId: '2',
-        serverName: 'GRPC'
-
+        serverName: 'GRPC',
       })
       .then((response: any) => {
         callback(null, response);

@@ -21,7 +21,7 @@ export class RemoteController extends BaseController {
       request,
       previousResponse
     );
-    if (skipNext || ! response.next) {
+    if (skipNext || !response.next) {
       return response;
     }
     return this.handleNext(request, response);

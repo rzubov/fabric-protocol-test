@@ -3,16 +3,14 @@ import { IController } from './types/controller';
 export abstract class BaseController {
   protected nextHandler?: IController | IController[];
 
-  public setNext(
-    handler: IController
-  ): IController {
+  public setNext(handler: IController): IController {
     this.nextHandler = handler;
     return handler;
   }
 
-  public setNextGroup(handlers: IController[]) {
+  public setNextGroup(handlers: IController[]): IController {
     this.nextHandler = handlers;
-    return [...handlers].pop();
+    return [...handlers].pop() as IController;
   }
 
   public async handleNext(

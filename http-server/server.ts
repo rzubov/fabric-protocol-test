@@ -61,7 +61,7 @@ app.post('/auth', async (req: Request, res: Response) => {
   controller
     .setNextGroup([remoteGoogleAuthController, remoteOktaAuthController])
     .setNext(afterAuthController);
-  console.log('auth:', req.body);
+
   const response = await controller.handle({
     sessionId: req.body.sessionId,
   });
